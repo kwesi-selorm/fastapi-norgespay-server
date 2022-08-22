@@ -27,6 +27,10 @@ class UserLogin(BaseModel):
     password: str
 
 
+class Contributor(BaseModel):
+    username: str
+
+
 class User(Document):
     username: str
     email: str
@@ -53,3 +57,10 @@ class Salary(Document):
 
     class Config:
         arbitrary_types_allowed = True
+
+
+class DBContributor(Document):
+    username: str
+
+    class Settings:
+        name = "contributors"

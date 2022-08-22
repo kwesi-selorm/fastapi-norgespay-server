@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import cors_options
 from database import init_db
-from routers import login, salaries, users
+from routers import login, salaries, signup, contributors
 
 app = FastAPI()
 
@@ -12,7 +12,8 @@ app.add_middleware(CORSMiddleware, **cors_options)
 
 app.include_router(login.router)
 app.include_router(salaries.router)
-app.include_router(users.router)
+app.include_router(signup.router)
+app.include_router(contributors.router)
 
 
 @app.on_event("startup")
