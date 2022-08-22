@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from config import cors_options
 from database import init_db
 from routers import login, salaries, users
-from config import cors_options
 
 app = FastAPI()
 

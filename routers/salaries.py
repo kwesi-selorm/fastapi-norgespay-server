@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException, status
-from typing import List
-from beanie import PydanticObjectId
 from datetime import datetime
-from fastapi.encoders import jsonable_encoder
+from typing import List
 
+from beanie import PydanticObjectId
+from fastapi import APIRouter, HTTPException, status
+from fastapi.encoders import jsonable_encoder
 from models import NewSalaryEntry, Salary, User
 
 router = APIRouter(tags=["Salaries"])

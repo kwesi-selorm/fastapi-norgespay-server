@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from models import User, UserEntry
 from fastapi.encoders import jsonable_encoder
-from passlib.hash import pbkdf2_sha256 as hash_algo
 from fastapi.responses import JSONResponse
+from models import User, UserEntry
+from passlib.hash import pbkdf2_sha256 as hash_algo
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
 
