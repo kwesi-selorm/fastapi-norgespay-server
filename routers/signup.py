@@ -4,7 +4,12 @@ from fastapi.responses import JSONResponse
 from models import User, UserEntry
 from passlib.hash import pbkdf2_sha256 as hash_algo
 
-router = APIRouter(prefix="/api/users", tags=["Users"])
+router = APIRouter(
+    prefix="/api/signup",
+    tags=[
+        "Sign Up",
+    ],
+)
 
 # CREATE NEW USER
 @router.post("/")
