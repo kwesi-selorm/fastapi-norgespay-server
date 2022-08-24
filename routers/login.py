@@ -1,37 +1,37 @@
-from pprint import pprint
-
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from models import User, UserLogin
+from fastapi.security import OAuth2PasswordRequestForm
+from models import User
 from passlib.hash import pbkdf2_sha256 as hash_algo
+from utils.jwt_helpers import encode_with_jwt
 
 router = APIRouter(tags=["Login"])
 
 
-@router.post("/api/login")
-async def login(payload: UserLogin):
+@router.post("/api/login", status_code=200)
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     LOG IN
     """
-    json_payload = jsonable_encoder(payload)
-    existing_user = await User.find_one(User.username == json_payload["username"])
-    json_existing_user: dict = jsonable_encoder(existing_user)
+    existing_user = await User.find_one(User.username == form_data.username)
     if not existing_user:
         raise HTTPException(status_code=404, detail="User not found")
-
+    json_existing_user: dict = jsonable_encoder(existing_user)
     existing_user_pwd_hash = json_existing_user["password_hash"]
-    match = hash_algo.verify(json_payload["password"], existing_user_pwd_hash)
-    if match:
-        # Add functionality to append token to be returned to the user
-        return JSONResponse(
-            status_code=200,
-            content={
-                "username": json_existing_user["username"],
-                "token": "token",
-            },
+    match = hash_algo.verify(form_data.password, existing_user_pwd_hash)
+    if not match:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid username or password",
         )
-    raise HTTPException(
-        status_code=400,
-        detail="Invalid username or password",
+
+    generated_token = await encode_with_jwt(
+        payload={"sub": json_existing_user["username"]}
+    )
+    return JSONResponse(
+        content={
+            "access_token": generated_token,
+            "token_type": "Bearer",
+        },
     )
