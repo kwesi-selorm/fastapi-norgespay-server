@@ -40,6 +40,10 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
+class SalaryAmount(BaseModel):
+    amount: int
+
+
 class User(Document):
     username: str
     email: str
